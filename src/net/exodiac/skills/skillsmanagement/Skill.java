@@ -1,4 +1,4 @@
-package net.exodiac.skills.SkillManagement;
+package net.exodiac.skills.skillsmanagement;
 
 import net.exodiac.core.EssentialMethods;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -15,8 +15,12 @@ public abstract class Skill {
 
     private Map<UUID, Integer> cooldown = new HashMap<>();
 
+    public Skill(String name) {
+        this.name = name;
+    }
+
     public abstract void execute(PlayerInteractEvent event, int power);
-    public abstract ItemStack getEssence();
+    public abstract ItemStack getEssencePearl();
 
     public String getSkillSuccessfulExecuteMessage() {
         if (name != null) {
@@ -25,6 +29,10 @@ public abstract class Skill {
             );
         }
         return null;
+    }
+
+    public String getEssenceLoreDesc() {
+        return EssentialMethods.color("&a&l+ &7&lEssence of " + getName() + " &8[1]");
     }
 
     public String getName() {

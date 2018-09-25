@@ -1,11 +1,8 @@
 package net.exodiac.skills;
 
 import net.exodiac.core.Essential.ItemBuilder;
-import net.exodiac.skills.SkillManagement.SkillHandler;
-import org.bukkit.Bukkit;
+import net.exodiac.skills.skillsmanagement.SkillHandler;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,10 +11,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkillsPlugin extends JavaPlugin implements Listener {
+    public SkillHandler handler;
+
+    @Override
     public void onEnable() {
-        SkillHandler handler = new SkillHandler(this);
-        getServer().getPluginManager().registerEvents(handler, this);
+        saveDefaultConfig();
+
+        getServer().getPluginManager().registerEvents(handler = new SkillHandler(this), this);
         getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new PearlPlacementListener(this), this);
     }
 
     @EventHandler

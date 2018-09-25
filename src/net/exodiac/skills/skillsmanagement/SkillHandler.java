@@ -1,7 +1,6 @@
-package net.exodiac.skills.SkillManagement;
+package net.exodiac.skills.skillsmanagement;
 
-import net.exodiac.core.EssentialMethods;
-import net.exodiac.skills.SkillManagement.Skills.Soul;
+import net.exodiac.skills.skillsmanagement.skills.Soul;
 import net.exodiac.skills.SkillsPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
