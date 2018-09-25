@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ExodiacCore">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Exodiac/plugins/ExodiacCore.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

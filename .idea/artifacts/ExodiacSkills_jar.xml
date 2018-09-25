@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ExodiacSkills:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ExodiacSkills_jar</output-path>
+    <root id="archive" name="ExodiacSkills.jar">
+      <element id="module-output" name="ExodiacSkills" />
+    </root>
+  </artifact>
+</component>
