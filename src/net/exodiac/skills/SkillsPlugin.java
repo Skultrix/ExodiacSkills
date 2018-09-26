@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkillsPlugin extends JavaPlugin implements Listener {
-    public SkillHandler handler;
+    private static SkillHandler handler;
 
     @Override
     public void onEnable() {
@@ -33,5 +33,9 @@ public class SkillsPlugin extends JavaPlugin implements Listener {
                 .addLoreLine("&a&l+ &6&lEssence of Soul [5]")
                 .build();
         player.getInventory().addItem(item);
+    }
+
+    public static SkillHandler getSkillHandler() {
+        return handler;
     }
 }

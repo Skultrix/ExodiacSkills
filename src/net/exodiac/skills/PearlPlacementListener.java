@@ -1,5 +1,6 @@
 package net.exodiac.skills;
 
+import net.exodiac.core.EssentialMethods;
 import net.exodiac.skills.skillsmanagement.SkillUtilities;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +38,31 @@ public class PearlPlacementListener implements Listener {
 
         if (!pearl.getItemMeta().getDisplayName().contains("Pearl")) return;
 
-        if (!getValidItems().contains(gear.getType())) return;
+        if (!this.getValidItems().contains(gear.getType())) return;
 
         //Now we are sure that the player has a pearl on the cursor
         //and the item that's being modified is a valid piece of gear.
 
         //We are finding the name of the skill.
 
-        String skillName = SkillUtilities.getSkillNameFromPearl(pearl.getItemMeta().getDisplayName());
+        e.setCancelled(true);
 
+        String skillName = SkillUtilities.getSkillNameFromPearl(pearl.getItemMeta().getDisplayName());
+        String loreLine = plugin.getSkillHandler().getSkillFromName(skillName).getEssenceLoreDesc(1);
+
+        List<String> gearLore = gear.getItemMeta().getLore();
+
+        gearLore.add("");
+        gearLore.add(loreLine);
+        gearLore.add(EssentialMethods.color("&7Level &61 [0/50]"));
+
+        //"Reloaded" the item meta.
+        ItemMeta meta = gear.getItemMeta();
+        meta.setLore(gearLore);
+        gear.setItemMeta(meta);
+
+        //Removing the pearl used.
+        pearl.setAmount(pearl.getAmount() - 1);
 
     }
 

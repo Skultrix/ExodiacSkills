@@ -18,10 +18,7 @@ public class Soul extends Skill {
     @Override
     public void execute(PlayerInteractEvent event, int power) {
 
-        if (getCooldown().containsKey(event.getPlayer().getUniqueId())) {
-            //TODO: Send cool down message.
-            return;
-        }
+
 
         Player player = event.getPlayer();
 

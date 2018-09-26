@@ -31,8 +31,8 @@ public abstract class Skill {
         return null;
     }
 
-    public String getEssenceLoreDesc() {
-        return EssentialMethods.color("&a&l+ &7&lEssence of " + getName() + " &8[1]");
+    public String getEssenceLoreDesc(int powerLevel) {
+        return EssentialMethods.color("&a&l+ &7&lEssence of " + getName() + " &8[" + String.valueOf(powerLevel) + "]");
     }
 
     public String getName() {

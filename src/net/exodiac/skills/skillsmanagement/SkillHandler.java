@@ -7,8 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SkillHandler implements Listener {
@@ -27,6 +29,8 @@ public class SkillHandler implements Listener {
         boolean shouldExecute = false;
         int essenceNamePos = -1;
 
+        //START: Checking whether item has essence.
+
         if (!event.getAction().name().contains("RIGHT")) return;
 
         if (!executable.hasItemMeta() || !executable.getItemMeta().hasLore()) return;
@@ -34,18 +38,58 @@ public class SkillHandler implements Listener {
         for (String entry : executable.getItemMeta().getLore()) {
             if (entry.contains("Essence of")) {
                 shouldExecute = true;
+
+                //Position of the lore line where the name is.
                 essenceNamePos = executable.getItemMeta().getLore().indexOf(entry);
                 break;
             }
         }
 
-        if (shouldExecute) {
-            String essenceName = executable.getItemMeta().getLore().get(essenceNamePos);
-            int powerLevel = Integer.parseInt(SkillUtilities.getEssenceDetailsFromString(essenceName, SkillUtilities.POWER_LEVEL));
-            String skillName = SkillUtilities.getEssenceDetailsFromString(essenceName, SkillUtilities.SKILL_NAME);
+        if (!shouldExecute) return;
 
-            getSkillFromName(skillName).execute(event, powerLevel);
-        }
+        //END: Checking whether item has essence.
+
+        String essenceName = executable.getItemMeta().getLore().get(essenceNamePos);
+
+        //Safety parsing to integer.
+        int powerLevel = Integer.parseInt(
+                SkillUtilities.getEssenceDetailsFromString(essenceName, SkillUtilities.POWER_LEVEL)
+        );
+        String skillName = SkillUtilities.getEssenceDetailsFromString(essenceName, SkillUtilities.SKILL_NAME);
+
+        Skill skill = getSkillFromName(skillName);
+
+        //We know what skill we're dealing with, now we are adding exp to the essence of the item.
+
+        EssenceAdvancementProcessor advancement = new EssenceAdvancementProcessor(
+                executable.getItemMeta().getLore().get(essenceNamePos + 1), skill
+        );
+
+        //if (skill.getCooldown().containsKey(player))
+
+        skill.execute(event, powerLevel);
+
+        advancement.addExp(10);
+
+        //Changing lore of the executable.
+        List<String> lore = executable.getItemMeta().getLore();
+
+        //Essence should always be at the bottom of the item's lore.
+        //Safely assuming that there is a line after the essence's name.
+        lore.remove(essenceNamePos); lore.remove(essenceNamePos + 1);
+
+        //Adding updated lore lines: contains the new exp, level, and power level.
+        lore.add(advancement.getNewLoreLines().get(0));
+        lore.add(advancement.getNewLoreLines().get(1));
+
+        //"Reloading" item's lore.
+        ItemMeta meta = executable.getItemMeta();
+        meta.setLore(lore);
+        executable.setItemMeta(meta);
+
+        //Done. We executed the skill's ability, then added 10 exp, updated the lore lines to show
+        //new exp, increase level and power if necessary.
+
     }
 
     public Skill getSkillFromName(String name) {
