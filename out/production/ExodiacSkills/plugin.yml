@@ -1,5 +1,7 @@
-name: Name
+name: ExodiacSkills
 author: willowhaus
 main: net.exodiac.skills.SkillsPlugin
 version: 1.0
-description:
+description: "Global management to skills features."
+depend: [ExodiacCore]
+api-version: 1.13

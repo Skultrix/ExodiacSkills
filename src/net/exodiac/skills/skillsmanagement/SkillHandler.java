@@ -76,7 +76,9 @@ public class SkillHandler implements Listener {
 
         //Essence should always be at the bottom of the item's lore.
         //Safely assuming that there is a line after the essence's name.
-        lore.remove(essenceNamePos); lore.remove(essenceNamePos + 1);
+        lore.remove(essenceNamePos);
+        //Second line will be in the same position as the first one
+        lore.remove(essenceNamePos);
 
         //Adding updated lore lines: contains the new exp, level, and power level.
         lore.add(advancement.getNewLoreLines().get(0));

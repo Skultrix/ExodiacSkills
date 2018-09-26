@@ -19,7 +19,7 @@ public class SkillsPlugin extends JavaPlugin implements Listener {
 
         getServer().getPluginManager().registerEvents(handler = new SkillHandler(this), this);
         getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new PearlPlacementListener(this), this);
+        getServer().getPluginManager().registerEvents(new PearlPlacementListener(), this);
     }
 
     @EventHandler
@@ -33,6 +33,7 @@ public class SkillsPlugin extends JavaPlugin implements Listener {
                 .addLoreLine("&a&l+ &6&lEssence of Soul [5]")
                 .build();
         player.getInventory().addItem(item);
+        player.getInventory().addItem(getSkillHandler().getSkillFromName("Soul").getEssencePearl());
     }
 
     public static SkillHandler getSkillHandler() {

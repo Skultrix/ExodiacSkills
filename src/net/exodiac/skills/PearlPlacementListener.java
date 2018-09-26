@@ -1,9 +1,10 @@
 package net.exodiac.skills;
 
 import net.exodiac.core.EssentialMethods;
+import net.exodiac.skills.skillsmanagement.SkillHandler;
 import net.exodiac.skills.skillsmanagement.SkillUtilities;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,15 +17,14 @@ import java.util.List;
 
 public class PearlPlacementListener implements Listener {
 
-    SkillsPlugin plugin;
+    private SkillHandler handler;
 
-    PearlPlacementListener(SkillsPlugin plugin) {
-        this.plugin = plugin;
+    PearlPlacementListener() {
+        handler = SkillsPlugin.getSkillHandler();
     }
 
     @EventHandler
     public void onPearlPlacement(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
         Inventory inventory = e.getInventory();
 
         ItemStack pearl = e.getCursor();
@@ -40,6 +40,10 @@ public class PearlPlacementListener implements Listener {
 
         if (!this.getValidItems().contains(gear.getType())) return;
 
+        for (String line : gear.getItemMeta().getLore())
+            if (ChatColor.stripColor(line).equals("+ Essence of")) return;
+
+
         //Now we are sure that the player has a pearl on the cursor
         //and the item that's being modified is a valid piece of gear.
 
@@ -48,9 +52,9 @@ public class PearlPlacementListener implements Listener {
         e.setCancelled(true);
 
         String skillName = SkillUtilities.getSkillNameFromPearl(pearl.getItemMeta().getDisplayName());
-        String loreLine = plugin.getSkillHandler().getSkillFromName(skillName).getEssenceLoreDesc(1);
+        String loreLine = handler.getSkillFromName(skillName).getEssenceLoreDesc(1);
 
-        List<String> gearLore = gear.getItemMeta().getLore();
+        List<String> gearLore = gear.getItemMeta().hasLore() ? gear.getItemMeta().getLore() : new ArrayList<>();
 
         gearLore.add("");
         gearLore.add(loreLine);

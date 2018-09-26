@@ -18,17 +18,23 @@ public class EssenceAdvancementProcessor {
 
     public EssenceAdvancementProcessor(String informationalLoreLine, Skill skill) {
         //Informational Lore Line: "Level x [x/x]"
+        this.skill = skill;
 
         String[] parts = ChatColor.stripColor(informationalLoreLine).split(" ");
         String[] expParts = parts[2].split("/");
 
         level = Integer.parseInt(parts[1]);
-        exp = Integer.parseInt(expParts[0].replace("[", "")) + (50 * level);
+        exp = Integer.parseInt(expParts[0].replace("[", ""));
 
+        updateStatistics();
+
+        System.out.println("Level = " + level + "Exp/power" + exp + power);
     }
 
     public void addExp(int amount) {
+        System.out.println(exp);
         exp += amount;
+        System.out.println(exp);
         checkExpLevels();
     }
 
@@ -72,11 +78,12 @@ public class EssenceAdvancementProcessor {
     public List<String> getNewLoreLines() {
 
         String levelStr = String.valueOf(level);
-        String expForLevel = String.valueOf( exp - level * 50 );
+        String expForLevel = String.valueOf(exp);
         String expNeeded = String.valueOf(50);
 
         List<String> lore = Arrays.asList(
                 SkillsPlugin.getSkillHandler().getSkillFromName(skill.getName()).getEssenceLoreDesc(power),
+                //I'll do this with String.format()
                 EssentialMethods.color("&7Level &6&l" + levelStr + " [" + expForLevel + "/" + expNeeded + "]")
         );
 

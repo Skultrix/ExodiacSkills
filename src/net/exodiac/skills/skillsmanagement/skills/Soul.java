@@ -18,12 +18,12 @@ public class Soul extends Skill {
     @Override
     public void execute(PlayerInteractEvent event, int power) {
 
-
-
         Player player = event.getPlayer();
 
-        player.setHealth(player.getHealth() + 4 * power);
+        //2 Hearts for every power level.
+        double healthAddition = player.getHealth() + 4 * power;
 
+        player.setHealth(healthAddition >= 20 ? 20.0 : healthAddition);
         player.sendMessage(super.getSkillSuccessfulExecuteMessage());
 
     }
