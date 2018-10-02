@@ -5,3 +5,6 @@ version: 1.0
 description: "Global management to skills features."
 depend: [ExodiacCore]
 api-version: 1.13
+commands:
+  essence:
+    usage: /<command>

@@ -10,6 +10,8 @@ import java.util.List;
 
 public class EssenceAdvancementProcessor {
 
+    private int expNeeded;
+
     private Skill skill;
 
     private int exp;
@@ -21,28 +23,34 @@ public class EssenceAdvancementProcessor {
         this.skill = skill;
 
         String[] parts = ChatColor.stripColor(informationalLoreLine).split(" ");
-        String[] expParts = parts[2].split("/");
 
         level = Integer.parseInt(parts[1]);
+        expNeeded = (int) (Math.pow(1.5, level)) * 50;
+
+        //experimental?
+        if (level == 10) {
+            return;
+        }
+
+        String[] expParts = parts[2].split("/");
         exp = Integer.parseInt(expParts[0].replace("[", ""));
 
         updateStatistics();
 
-        System.out.println("Level = " + level + "Exp/power" + exp + power);
     }
 
-    public void addExp(int amount) {
-        System.out.println(exp);
+    public EssenceAdvancementProcessor addExp(int amount) {
+        if (level == 10) return this;
         exp += amount;
-        System.out.println(exp);
         checkExpLevels();
+        return this;
     }
 
-    public void checkExpLevels() {
+    private void checkExpLevels() {
         if (level != 10) {
-            int nextLvlExp = level * 50;
-            if (nextLvlExp <= exp) {
+            if (this.expNeeded <= exp) {
                 level += 1;
+                exp = exp - (int) (Math.pow(1.5, level - 1)) * 50;
                 updateStatistics();
             }
         }
@@ -59,12 +67,10 @@ public class EssenceAdvancementProcessor {
                 break;
             case 7:
             case 6:
-                break;
             case 5:
                 power = 3;
                 break;
             case 4:
-                break;
             case 3:
                 power = 2;
                 break;
@@ -79,12 +85,14 @@ public class EssenceAdvancementProcessor {
 
         String levelStr = String.valueOf(level);
         String expForLevel = String.valueOf(exp);
-        String expNeeded = String.valueOf(50);
+        String expNeeded = String.valueOf(this.expNeeded);
 
         List<String> lore = Arrays.asList(
                 SkillsPlugin.getSkillHandler().getSkillFromName(skill.getName()).getEssenceLoreDesc(power),
                 //I'll do this with String.format()
-                EssentialMethods.color("&7Level &6&l" + levelStr + " [" + expForLevel + "/" + expNeeded + "]")
+                level == 10 ?
+                        EssentialMethods.color("&7Level &c&l10 &8[&6&lMAX&8]"):
+                        EssentialMethods.color("&7Level &6&l" + levelStr + " &8[" + expForLevel + "/" + expNeeded + "]")
         );
 
         return lore;

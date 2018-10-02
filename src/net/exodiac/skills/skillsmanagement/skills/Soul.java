@@ -11,8 +11,7 @@ import org.bukkit.inventory.ItemStack;
 public class Soul extends Skill {
 
     public Soul() {
-        super("Soul");
-        setCooldown(10);
+        super("Soul", 10);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.exodiac.skills;
 
 import net.exodiac.core.Essential.ItemBuilder;
+import net.exodiac.skills.skillsmanagement.EssenceGiveCommand;
 import net.exodiac.skills.skillsmanagement.SkillHandler;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkillsPlugin extends JavaPlugin implements Listener {
+    
     private static SkillHandler handler;
 
     @Override
@@ -20,6 +22,8 @@ public class SkillsPlugin extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(handler = new SkillHandler(this), this);
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new PearlPlacementListener(), this);
+
+        getCommand("essence").setExecutor(new EssenceGiveCommand());
     }
 
     @EventHandler

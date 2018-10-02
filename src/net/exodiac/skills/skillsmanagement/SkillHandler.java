@@ -61,15 +61,13 @@ public class SkillHandler implements Listener {
 
         //We know what skill we're dealing with, now we are adding exp to the essence of the item.
 
-        EssenceAdvancementProcessor advancement = new EssenceAdvancementProcessor(
+        List<String> advancement = new EssenceAdvancementProcessor(
                 executable.getItemMeta().getLore().get(essenceNamePos + 1), skill
-        );
+        ).addExp(10).getNewLoreLines();
 
         //if (skill.getCooldown().containsKey(player))
 
         skill.execute(event, powerLevel);
-
-        advancement.addExp(10);
 
         //Changing lore of the executable.
         List<String> lore = executable.getItemMeta().getLore();
@@ -77,12 +75,11 @@ public class SkillHandler implements Listener {
         //Essence should always be at the bottom of the item's lore.
         //Safely assuming that there is a line after the essence's name.
         lore.remove(essenceNamePos);
-        //Second line will be in the same position as the first one
+        //Second line will be in the same position as the first one (cus it got removed)
         lore.remove(essenceNamePos);
 
         //Adding updated lore lines: contains the new exp, level, and power level.
-        lore.add(advancement.getNewLoreLines().get(0));
-        lore.add(advancement.getNewLoreLines().get(1));
+        lore.addAll(advancement);
 
         //"Reloading" item's lore.
         ItemMeta meta = executable.getItemMeta();
@@ -100,6 +97,10 @@ public class SkillHandler implements Listener {
 
     public Map<String, Skill> getSkills() {
         return skills;
+    }
+
+    public boolean skillExists(String name) {
+        return skills.containsKey(name);
     }
 
 }
